@@ -1,14 +1,34 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'
+    id 'signing'
 }
 
-android {
-    namespace 'com.github.xatzipe.xtzplib'
-    compileSdk 33
+def meta = [
+        namespace  : 'io.github.xatzipe.xtzplib',
+        groupId    : 'io.github.xatzipe',
+        artifactId : 'xtzplib',
+        version    : '0.0.2-SNAPSHOT',
+        description: 'Xatzipe Android Library ',
+        orgUrl     : 'https://github.com/xatzipe',
+        baseUrl    : 'https://github.com/xatzipe/XtzpLibAndroid',
+        gitUrl     : 'scm:git:git@github.com:xatzipe/XtzpLibAndroid.git',
+        sshUrl     : 'scm:git:ssh://github.com:xatzipe/XtzpLibAndroid.git',
+        developer  : [
+                id   : 'xatzipe@gmail',
+                name : 'xatzipe',
+                email: 'xatzipe@gmail.com'
+        ]
+]
 
+android {
+    namespace meta.namespace
+    compileSdk 33
+    version = meta.version
+    group = meta.groupId
     defaultConfig {
-        minSdk 28
+        minSdk 26
         targetSdk 33
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -28,14 +48,103 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    sourceSets {
+        test {
+            resources {
+                srcDirs 'src\\test\\assets'
+            }
+        }
+    }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
-
-    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.8.0'
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    if (project.plugins.findPlugin("com.android.library")) {
+        // For android libraries
+        from android.sourceSets.main.java.srcDirs
+        from android.sourceSets.main.kotlin.srcDirs
+    } else {
+        // For pure kotlin libraries, in case you have them
+        from sourceSets.main.java.srcDirs
+        from sourceSets.main.kotlin.srcDirs
+    }
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            afterEvaluate {
+                from components.release
+            }
+
+            // The coordinates of the library, being set from variables that
+            // we'll setup later
+            groupId meta.groupId
+            artifactId meta.artifactId
+            version meta.version
+
+
+            // Mostly self-explanatory metadata
+            pom {
+                name = meta.artifactId
+                description = meta.description
+                url = meta.baseUrl
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = meta.developer.id
+                        name = meta.developer.name
+                        email = meta.developer.email
+                    }
+                }
+                // Version control info
+                scm {
+                    connection = meta.sshUrl
+                    developerConnection = meta.sshUrl
+                    url = meta.baseUrl
+                }
+            }
+
+        }
+    }
+    repositories {
+        maven {
+            name = 'sonatype'
+            url = meta.version.endsWith('SNAPSHOT') ?
+                    'https://s01.oss.sonatype.org/content/repositories/snapshots/' :
+                    'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            credentials(PasswordCredentials)
+        }
+    }
+}
+
+signing {
+    def signingKeyId = findProperty("signingKeyId")
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    sign publishing.publications['release']
 }

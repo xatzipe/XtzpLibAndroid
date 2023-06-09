@@ -1,4 +1,4 @@
-package com.github.xatzipe.xtzplib
+package io.github.xatzipe.xtzplib
 
 import org.junit.Test
 
