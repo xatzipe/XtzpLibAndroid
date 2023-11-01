@@ -1,32 +1,33 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
-    id 'signing'
+//    id 'maven-publish'
+//    id 'signing'
+    id 'com.vanniktech.maven.publish'
 }
 
 def meta = [
         namespace  : 'io.github.xatzipe.xtzplib',
         groupId    : 'io.github.xatzipe',
         artifactId : 'xtzplib',
-        version    : '0.0.2-SNAPSHOT',
-        description: 'Xatzipe Android Library ',
-        orgUrl     : 'https://github.com/xatzipe',
-        baseUrl    : 'https://github.com/xatzipe/XtzpLibAndroid',
-        gitUrl     : 'scm:git:git@github.com:xatzipe/XtzpLibAndroid.git',
-        sshUrl     : 'scm:git:ssh://github.com:xatzipe/XtzpLibAndroid.git',
-        developer  : [
-                id   : 'xatzipe@gmail',
-                name : 'xatzipe',
-                email: 'xatzipe@gmail.com'
-        ]
+//        version    : '0.0.2-SNAPSHOT',
+//        description: 'Xatzipe Android Library ',
+//        orgUrl     : 'https://github.com/xatzipe',
+//        baseUrl    : 'https://github.com/xatzipe/XtzpLibAndroid',
+//        gitUrl     : 'scm:git:git@github.com:xatzipe/XtzpLibAndroid.git',
+//        sshUrl     : 'scm:git:ssh://github.com:xatzipe/XtzpLibAndroid.git',
+//        developer  : [
+//                id   : 'xatzipe@gmail',
+//                name : 'xatzipe',
+//                email: 'xatzipe@gmail.com'
+//        ]
 ]
 
 android {
     namespace meta.namespace
     compileSdk 33
-    version = meta.version
-    group = meta.groupId
+//    version = meta.version
+//    group = meta.groupId
     defaultConfig {
         minSdk 26
         targetSdk 33
@@ -57,12 +58,12 @@ android {
         }
     }
 
-    publishing {
-        singleVariant('release') {
-            withSourcesJar()
-            withJavadocJar()
-        }
-    }
+//    publishing {
+//        singleVariant('release') {
+//            withSourcesJar()
+//            withJavadocJar()
+//        }
+//    }
 }
 
 dependencies {
@@ -88,63 +89,63 @@ task androidSourcesJar(type: Jar) {
     }
 }
 
-publishing {
-    publications {
-        release(MavenPublication) {
-            afterEvaluate {
-                from components.release
-            }
-
-            // The coordinates of the library, being set from variables that
-            // we'll setup later
-            groupId meta.groupId
-            artifactId meta.artifactId
-            version meta.version
-
-
-            // Mostly self-explanatory metadata
-            pom {
-                name = meta.artifactId
-                description = meta.description
-                url = meta.baseUrl
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id = meta.developer.id
-                        name = meta.developer.name
-                        email = meta.developer.email
-                    }
-                }
-                // Version control info
-                scm {
-                    connection = meta.sshUrl
-                    developerConnection = meta.sshUrl
-                    url = meta.baseUrl
-                }
-            }
-
-        }
-    }
-    repositories {
-        maven {
-            name = 'sonatype'
-            url = meta.version.endsWith('SNAPSHOT') ?
-                    'https://s01.oss.sonatype.org/content/repositories/snapshots/' :
-                    'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
-            credentials(PasswordCredentials)
-        }
-    }
-}
-
-signing {
-    def signingKeyId = findProperty("signingKeyId")
-    def signingKey = findProperty("signingKey")
-    def signingPassword = findProperty("signingPassword")
-    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-    sign publishing.publications['release']
-}
+//publishing {
+//    publications {
+//        release(MavenPublication) {
+//            afterEvaluate {
+//                from components.release
+//            }
+//
+//            // The coordinates of the library, being set from variables that
+//            // we'll setup later
+//            groupId meta.groupId
+//            artifactId meta.artifactId
+//            version meta.version
+//
+//
+//            // Mostly self-explanatory metadata
+//            pom {
+//                name = meta.artifactId
+//                description = meta.description
+//                url = meta.baseUrl
+//                licenses {
+//                    license {
+//                        name = 'The Apache License, Version 2.0'
+//                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+//                    }
+//                }
+//                developers {
+//                    developer {
+//                        id = meta.developer.id
+//                        name = meta.developer.name
+//                        email = meta.developer.email
+//                    }
+//                }
+//                // Version control info
+//                scm {
+//                    connection = meta.sshUrl
+//                    developerConnection = meta.sshUrl
+//                    url = meta.baseUrl
+//                }
+//            }
+//
+//        }
+//    }
+////    repositories {
+////        maven {
+////            name = 'sonatype'
+////            url = meta.version.endsWith('SNAPSHOT') ?
+////                    'https://s01.oss.sonatype.org/content/repositories/snapshots/' :
+////                    'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+////            credentials(PasswordCredentials)
+////        }
+////    }
+//}
+//
+//signing {
+//    def signingKeyId = findProperty("signingKeyId")
+//    def signingKey = findProperty("signingKey")
+//    def signingPassword = findProperty("signingPassword")
+//    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+//    sign publishing.publications['release']
+//}
