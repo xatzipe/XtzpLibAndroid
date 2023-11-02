@@ -24,9 +24,9 @@ def meta = [
 ]
 
 android {
-//    namespace meta.namespace
+    namespace meta.namespace
 //    version = meta.version
-//    group = meta.groupId
+    group = meta.groupId
     compileSdk 33
     defaultConfig {
         minSdk 26
