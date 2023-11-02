@@ -1,16 +1,16 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
-//    id 'maven-publish'
-//    id 'signing'
-    id 'com.vanniktech.maven.publish'
+    id 'maven-publish'
+    id 'signing'
+//    id 'com.vanniktech.maven.publish'
 }
 
 def meta = [
         namespace  : 'io.github.xatzipe.xtzplib',
         groupId    : 'io.github.xatzipe',
         artifactId : 'xtzplib',
-//        version    : '0.0.2-SNAPSHOT',
+//        version    : '0.0.3-SNAPSHOT',
 //        description: 'Xatzipe Android Library ',
 //        orgUrl     : 'https://github.com/xatzipe',
 //        baseUrl    : 'https://github.com/xatzipe/XtzpLibAndroid',
@@ -58,12 +58,12 @@ android {
         }
     }
 
-//    publishing {
-//        singleVariant('release') {
-//            withSourcesJar()
-//            withJavadocJar()
-//        }
-//    }
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
@@ -89,21 +89,21 @@ task androidSourcesJar(type: Jar) {
     }
 }
 
-//publishing {
-//    publications {
-//        release(MavenPublication) {
-//            afterEvaluate {
-//                from components.release
-//            }
-//
-//            // The coordinates of the library, being set from variables that
-//            // we'll setup later
+publishing {
+    publications {
+        release(MavenPublication) {
+            afterEvaluate {
+                from components.release
+            }
+
+            // The coordinates of the library, being set from variables that
+            // we'll setup later
 //            groupId meta.groupId
 //            artifactId meta.artifactId
 //            version meta.version
-//
-//
-//            // Mostly self-explanatory metadata
+
+
+            // Mostly self-explanatory metadata
 //            pom {
 //                name = meta.artifactId
 //                description = meta.description
@@ -128,24 +128,24 @@ task androidSourcesJar(type: Jar) {
 //                    url = meta.baseUrl
 //                }
 //            }
-//
-//        }
-//    }
-////    repositories {
-////        maven {
-////            name = 'sonatype'
-////            url = meta.version.endsWith('SNAPSHOT') ?
-////                    'https://s01.oss.sonatype.org/content/repositories/snapshots/' :
-////                    'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
-////            credentials(PasswordCredentials)
-////        }
-////    }
-//}
-//
-//signing {
-//    def signingKeyId = findProperty("signingKeyId")
-//    def signingKey = findProperty("signingKey")
-//    def signingPassword = findProperty("signingPassword")
-//    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-//    sign publishing.publications['release']
-//}
+
+        }
+    }
+    repositories {
+        maven {
+            name = 'sonatype'
+            url = findProperty("version").endsWith('SNAPSHOT') ?
+                    'https://s01.oss.sonatype.org/content/repositories/snapshots/' :
+//                    'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            credentials(PasswordCredentials)
+        }
+    }
+}
+
+signing {
+    def signingKeyId = findProperty("signingKeyId")
+    def signingKey = findProperty("signingKey")
+    def signingPassword = findProperty("signingPassword")
+    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    sign publishing.publications['release']
+}
