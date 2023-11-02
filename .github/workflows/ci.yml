@@ -47,7 +47,8 @@ jobs:
       - name: Publish with Gradle Wrapper
         uses: gradle/gradle-build-action@v2.4.2
         with:
-          arguments: publish --full-stacktrace
+#          arguments: publish --full-stacktrace
+          arguments: publishAllPublicationsToMavenCentral --full-stacktrace
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.OSSRH_GPG_KEY_ID }}
