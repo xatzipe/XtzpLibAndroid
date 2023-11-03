@@ -1,9 +1,7 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-//    id 'maven-publish'
-//    id 'signing'
-    id 'com.vanniktech.maven.publish'
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.maven.publish
 }
 
 def meta = [
@@ -26,11 +24,11 @@ def meta = [
 android {
     namespace meta.namespace
 //    version = meta.version
-    group = meta.groupId
-    compileSdk 33
+//    group = meta.groupId
+    compileSdk libs.versions.compileSdk.get().toInteger()
     defaultConfig {
-        minSdk 26
-        targetSdk 33
+        minSdk libs.versions.minSdk.get().toInteger()
+        targetSdk libs.versions.targetSdk.get().toInteger()
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -149,3 +147,12 @@ task androidSourcesJar(type: Jar) {
 //    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
 //    sign publishing.publications['release']
 //}
+
+mavenPublishing {
+    pom {
+        ciManagement {
+            system = "github"
+            url = "${meta.baseUrl}/actions"
+        }
+    }
+}
