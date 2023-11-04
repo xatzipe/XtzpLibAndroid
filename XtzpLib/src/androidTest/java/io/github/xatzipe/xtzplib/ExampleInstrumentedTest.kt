@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.github.xatzipe.xtzplib.test", appContext.packageName)
+        assertEquals("io.github.xatzipe.xtzplib.test", appContext.packageName)
     }
 }
