@@ -6,6 +6,7 @@ kotlin = "1.8.10"
 gradle-plugin = "7.4.2"
 kotlinxSerialization = "1.6.0"
 mavenPublish="0.25.3"
+dependencycheck = "8.4.0"
 
 [libraries]
 
@@ -13,3 +14,4 @@ mavenPublish="0.25.3"
 android-library = { id = "com.android.library", version.ref = "gradle-plugin" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref="mavenPublish" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
