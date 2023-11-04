@@ -1,13 +1,15 @@
 plugins {
+
     alias libs.plugins.android.library
     alias libs.plugins.kotlin.android
     alias libs.plugins.maven.publish
+    alias libs.plugins.jacoco
 }
 
 def meta = [
-        namespace  : 'io.github.xatzipe.xtzplib',
-        groupId    : 'io.github.xatzipe',
-        artifactId : 'xtzplib',
+        namespace : 'io.github.xatzipe.xtzplib',
+        groupId   : 'io.github.xatzipe',
+        artifactId: 'xtzplib',
 //        version    : '0.0.3-SNAPSHOT',
 //        description: 'Xatzipe Android Library ',
 //        orgUrl     : 'https://github.com/xatzipe',
@@ -38,6 +40,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            testCoverageEnabled true
         }
     }
     compileOptions {
@@ -62,6 +65,20 @@ android {
 //            withJavadocJar()
 //        }
 //    }
+}
+
+junitJacoco {
+    jacocoVersion = '0.8.7' // type String
+    ignoreProjects = [] // type String array
+    includeNoLocationClasses = false
+    includeInstrumentationCoverageInMergedReport = false
+//    jacocoVersion = '0.8.7' // type String
+//    ignoreProjects = [] // type String array
+//    excludes // type String List
+//    includeNoLocationClasses = false // type boolean
+//    includeInstrumentationCoverageInMergedReport = false // type boolean
+//    csv.enabled = true
+//    html.enabled = true
 }
 
 dependencies {
