@@ -13,5 +13,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "My Android Application with Library"
+rootProject.name = "XtzpLibAndroid"
 include ':XtzpLib'

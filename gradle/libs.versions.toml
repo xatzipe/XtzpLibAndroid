@@ -6,14 +6,14 @@ kotlin = "1.8.10"
 gradle-plugin = "7.4.2"
 kotlinxSerialization = "1.6.0"
 mavenPublish = "0.25.3"
-jacoco = "0.16.0"
+sonarqube = "4.4.1.3373"
 dependencycheck = "8.4.2"
 
 [libraries]
 
 [plugins]
-jacoco = { id = "com.vanniktech.android.junit.jacoco", version.ref = "jacoco" }
 android-library = { id = "com.android.library", version.ref = "gradle-plugin" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }
