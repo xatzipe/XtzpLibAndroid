@@ -5,25 +5,8 @@ plugins {
     alias(libs.plugins.sonarqube)
 }
 
-def meta = [
-        namespace : 'io.github.xatzipe.xtzplib',
-        groupId   : 'io.github.xatzipe',
-        artifactId: 'xtzplib',
-//        version    : '0.0.3-SNAPSHOT',
-//        description: 'Xatzipe Android Library ',
-//        orgUrl     : 'https://github.com/xatzipe',
-//        baseUrl    : 'https://github.com/xatzipe/XtzpLibAndroid',
-//        gitUrl     : 'scm:git:git@github.com:xatzipe/XtzpLibAndroid.git',
-//        sshUrl     : 'scm:git:ssh://github.com:xatzipe/XtzpLibAndroid.git',
-//        developer  : [
-//                id   : 'xatzipe@gmail',
-//                name : 'xatzipe',
-//                email: 'xatzipe@gmail.com'
-//        ]
-]
-
 android {
-    namespace meta.namespace
+    namespace NAMESPACE
     compileSdk libs.versions.compileSdk.get().toInteger()
     defaultConfig {
         minSdk libs.versions.minSdk.get().toInteger()
@@ -57,20 +40,7 @@ android {
             }
         }
     }
-
-//    publishing {
-//        singleVariant('release') {
-//            withSourcesJar()
-//            withJavadocJar()
-//        }
-//    }
 }
-
-//junitJacoco {
-//    jacocoVersion = '0.8.7' // type String
-//    includeNoLocationClasses = false
-//    includeInstrumentationCoverageInMergedReport = false
-//}
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
@@ -82,24 +52,11 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
 
-task androidSourcesJar(type: Jar) {
-    archiveClassifier.set('sources')
-    if (project.plugins.findPlugin("com.android.library")) {
-        // For android libraries
-        from android.sourceSets.main.java.srcDirs
-        from android.sourceSets.main.kotlin.srcDirs
-    } else {
-        // For pure kotlin libraries, in case you have them
-        from sourceSets.main.java.srcDirs
-        from sourceSets.main.kotlin.srcDirs
-    }
-}
-
 mavenPublishing {
     pom {
         ciManagement {
             system = "github"
-            url = "${meta.baseUrl}/actions"
+            url = "${POM_SCM_URL}/actions"
         }
     }
 }
