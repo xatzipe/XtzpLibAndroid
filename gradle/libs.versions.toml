@@ -14,6 +14,7 @@ dependencycheck = "8.4.2"
 [plugins]
 android-library = { id = "com.android.library", version.ref = "gradle-plugin" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
+maven-publishbase = { id = "com.vanniktech.maven.publish.base", version.ref = "mavenPublish" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 dependencycheck = { id = "org.owasp.dependencycheck", version.ref = "dependencycheck" }

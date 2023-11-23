@@ -1,7 +1,11 @@
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     alias libs.plugins.android.library
     alias libs.plugins.kotlin.android
-    alias libs.plugins.maven.publish
+//    alias libs.plugins.maven.publish
+    alias libs.plugins.maven.publishbase
     alias(libs.plugins.sonarqube)
 }
 
@@ -55,6 +59,18 @@ dependencies {
 }
 
 mavenPublishing {
+
+    def sonatypeHost = project.findProperty("SONATYPE_HOST")?.toString()
+    if (!sonatypeHost?.isBlank()) {
+        def automaticRelease = project.findProperty("SONATYPE_AUTOMATIC_RELEASE")?.toBoolean()
+        publishToMavenCentral(SonatypeHost.valueOf(sonatypeHost), automaticRelease)
+    }
+    def releaseSigning = project.findProperty("RELEASE_SIGNING_ENABLED")?.toBoolean()
+    if (releaseSigning == true) {
+        signAllPublications()
+    }
+    configure(new AndroidSingleVariantLibrary("release", true, false))
+    pomFromGradleProperties()
     pom {
         ciManagement {
             system = "github"
