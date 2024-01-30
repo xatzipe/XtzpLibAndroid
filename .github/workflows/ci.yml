@@ -18,7 +18,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
       - name: Build with Gradle Wrapper
         uses: gradle/gradle-build-action@v2.9.0
         with:
@@ -39,7 +39,7 @@ jobs:
           java-version: 17
           distribution: "temurin"
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
       - name: Build with Gradle Wrapper
         uses: gradle/gradle-build-action@v2.9.0
         with:
@@ -69,7 +69,7 @@ jobs:
           java-version: 17
           distribution: "temurin"
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
       - name: Run android tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -95,7 +95,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
       - name: Publish with Gradle Wrapper
         uses: gradle/gradle-build-action@v2.9.0
         with:
