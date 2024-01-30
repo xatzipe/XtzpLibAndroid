@@ -59,7 +59,7 @@ jobs:
           java-version: '17'
           
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
       - name: Cache Dependency-Check Data
         uses: actions/cache@v4
         with:
@@ -67,7 +67,6 @@ jobs:
             ~/.gradle/dependency-check-data
           key: ${{ runner.os }}-dependency-check-${{ hashFiles('**/*.gradle*') }}
           restore-keys: ${{ runner.os }}-dependency-check
-          
       - name: Build with Gradle Wrapper & Run Dependency-Check
         uses: gradle/gradle-build-action@v3.1.0
         with:
