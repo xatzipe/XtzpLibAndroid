@@ -20,7 +20,7 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: Build with Gradle Wrapper
-        uses: gradle/gradle-build-action@v2.9.0
+        uses: gradle/gradle-build-action@v3.0.0
         with:
           gradle-version: wrapper
           arguments: build
@@ -41,7 +41,7 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: Build with Gradle Wrapper
-        uses: gradle/gradle-build-action@v2.9.0
+        uses: gradle/gradle-build-action@v3.0.0
         with:
           arguments: test --full-stacktrace
 
@@ -97,7 +97,7 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
       - name: Publish with Gradle Wrapper
-        uses: gradle/gradle-build-action@v2.9.0
+        uses: gradle/gradle-build-action@v3.0.0
         with:
 #          arguments: publish --full-stacktrace
           arguments: publishAllPublicationsToMavenCentral --full-stacktrace
