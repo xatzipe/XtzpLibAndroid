@@ -69,7 +69,7 @@ jobs:
           restore-keys: ${{ runner.os }}-dependency-check
           
       - name: Build with Gradle Wrapper & Run Dependency-Check
-        uses: gradle/gradle-build-action@v2.11.1
+        uses: gradle/gradle-build-action@v3.1.0
         with:
           gradle-version: wrapper
           arguments: dependencyCheckAnalyze --info
