@@ -1,15 +1,18 @@
-import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
-import com.vanniktech.maven.publish.KotlinJvm
-import com.vanniktech.maven.publish.SonatypeHost
-import com.vanniktech.maven.publish.GradlePlugin
-import com.vanniktech.maven.publish.JavadocJar
+import com.github.jk1.license.filter.ExcludeTransitiveDependenciesFilter
+import com.github.jk1.license.filter.LicenseBundleNormalizer
+import com.github.jk1.license.filter.ReduceDuplicateLicensesFilter
+import com.github.jk1.license.render.InventoryMarkdownReportRenderer
 
 plugins {
     alias libs.plugins.android.library
     alias libs.plugins.kotlin.android
-//    alias libs.plugins.maven.publish
-    alias libs.plugins.maven.publishbase
-    alias(libs.plugins.sonarqube)
+    alias libs.plugins.dokka
+
+    alias libs.plugins.dependency.license.report
+    id 'signing'
+    alias libs.plugins.dependencycheck
+    alias libs.plugins.sonarqube
+    alias libs.plugins.maven.publish
 }
 
 apply from: 'jacoco.gradle'
@@ -61,18 +64,45 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
 
+tasks.register("clearDocsDir", Delete.class) {
+    delete(file("$rootDir/docs"))
+}
+
+dokkaGfm.dependsOn("clearDocsDir")
+dokkaGfm {
+    outputDirectory.set(file("$rootDir/docs"))
+}
+
+licenseReport {
+    unionParentPomLicenses = false
+    filters = [new LicenseBundleNormalizer(), new ReduceDuplicateLicensesFilter(), new ExcludeTransitiveDependenciesFilter()]
+    configurations = ['releaseRuntimeClasspath']
+    excludeBoms = true
+    excludeOwnGroup = true
+    renderers = [new InventoryMarkdownReportRenderer("licenses.md", "${POM_DESCRIPTION}")]
+}
+
+tasks.register('copyLicenseReport', Copy) {
+    from "$buildDir/reports/dependency-license/licenses.md"
+    into "$rootDir"
+    dependsOn 'generateLicenseReport'
+}
+generateLicenseReport.finalizedBy("copyLicenseReport")
+build.finalizedBy("generateLicenseReport", "dokkaGfm")
+
+tasks.register('dokkaHtmlJar', Jar.class) {
+    dependsOn(dokkaHtml)
+    from(dokkaHtml)
+    archiveClassifier.set("html-docs")
+}
+
+tasks.register('dokkaJavadocJar', Jar.class) {
+    dependsOn(dokkaJavadoc)
+    from(dokkaJavadoc)
+    archiveClassifier.set("javadoc")
+}
+
 mavenPublishing {
-    def sonatypeHost = project.findProperty("SONATYPE_HOST")?.toString()
-    if (!sonatypeHost?.isBlank()) {
-        def automaticRelease = project.findProperty("SONATYPE_AUTOMATIC_RELEASE")?.toBoolean()
-        publishToMavenCentral(SonatypeHost.valueOf(sonatypeHost), automaticRelease)
-    }
-    def releaseSigning = project.findProperty("RELEASE_SIGNING_ENABLED")?.toBoolean()
-    if (releaseSigning == true) {
-        signAllPublications()
-    }
-    configure(new AndroidSingleVariantLibrary("release", true, false))
-    pomFromGradleProperties()
     pom {
         ciManagement {
             system = "github"
