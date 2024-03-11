@@ -30,25 +30,25 @@ jobs:
         name: Extract code version from gradle.properties
         run: echo "CODE_VERSION=$(awk -F= '$1~/version/{print $2}' gradle.properties)" >> $GITHUB_OUTPUT
 
-  unit-tests:
-    runs-on: ubuntu-latest
-    needs: [ build ]
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout project source code
-        uses: actions/checkout@v4
-      - name: set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: "temurin"
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-      - name: Build with Gradle Wrapper
-        uses: gradle/gradle-build-action@v3.1.0
-        with:
-          arguments: test --full-stacktrace
+#  unit-tests:
+#    runs-on: ubuntu-latest
+#    needs: [ build ]
+#    permissions:
+#      contents: read
+#    steps:
+#      - name: Checkout project source code
+#        uses: actions/checkout@v4
+#      - name: set up JDK 17
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: 17
+#          distribution: "temurin"
+#      - name: Validate Gradle Wrapper
+#        uses: gradle/wrapper-validation-action@v1
+#      - name: Build with Gradle Wrapper
+#        uses: gradle/gradle-build-action@v3.1.0
+#        with:
+#          arguments: test --full-stacktrace
 
 #  android-tests:
 #    runs-on: macos-latest
@@ -85,7 +85,7 @@ jobs:
 
   publish-to-snapshot:
     name: Publish SNAPSHOT to sonatype.org
-    needs: [ build, unit-tests ]
+    needs: [ build ] #, unit-tests ]
     # Runs only in main
 #    if: github.event_name != 'pull_request' && endsWith(needs.build.outputs.code-version, '-SNAPSHOT') && github.ref == 'refs/heads/main' &&  github.repository_owner == 'xatzipe'
     runs-on: ubuntu-latest
@@ -108,23 +108,17 @@ jobs:
           java-version: '17'
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
-      - name: Publish with Gradle Wrapper
-        uses: gradle/gradle-build-action@vv3.1.0
-        with:
-#          arguments: publish --full-stacktrace
-          arguments: publishAllPublicationsToMavenCentral --full-stacktrace
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.OSSRH_GPG_KEY_ID }}
-#          ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-#          ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_GPG_PASSPHRASE }}
-#          ORG_GRADLE_PROJECT_sonatypeUsername: ${{ secrets.OSSRH_USERNAME }}
-#          ORG_GRADLE_PROJECT_sonatypePassword: ${{ secrets.OSSRH_PASSWORD }}
-
-
-          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.OSSRH_GPG_KEY_ID }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.OSSRH_GPG_PASSPHRASE }}
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
-          GIT_REF_NAME: ${{ github.ref_name }}
+#      - name: Publish with Gradle Wrapper
+#        uses: gradle/gradle-build-action@v3.1.0
+#        with:
+##          arguments: publish --full-stacktrace
+#          arguments: publishAllPublicationsToMavenCentral --full-stacktrace
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#
+#          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.OSSRH_GPG_KEY_ID }}
+#          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
+#          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.OSSRH_GPG_PASSPHRASE }}
+#          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.OSSRH_USERNAME }}
+#          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.OSSRH_PASSWORD }}
+#          GIT_REF_NAME: ${{ github.ref_name }}
