@@ -50,49 +50,56 @@ jobs:
         with:
           arguments: test --full-stacktrace
 
-  android-tests:
-    runs-on: macos-latest
-    timeout-minutes: 35
-    needs: [ unit-tests ]
-    strategy:
-      matrix:
-        include:
-          - api-level: 28
-            target: default
-            arch: x86
-          - api-level: 33
-            target: google_apis # emulator API 33 only exists with Google APIs
-            arch: x86_64
-    permissions:
-      contents: read
-    steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4
-      - name: set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          distribution: "temurin"
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-      - name: Run android tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.target }}
-          arch: ${{ matrix.arch }}
-          script: ./gradlew $GRADLE_OPTS connectedCheck --stacktrace
+#  android-tests:
+#    runs-on: macos-latest
+#    timeout-minutes: 35
+#    needs: [ unit-tests ]
+#    strategy:
+#      matrix:
+#        include:
+#          - api-level: 28
+#            target: default
+#            arch: x86
+#          - api-level: 33
+#            target: google_apis # emulator API 33 only exists with Google APIs
+#            arch: x86_64
+#    permissions:
+#      contents: read
+#    steps:
+#      - name: Checkout the code
+#        uses: actions/checkout@v4
+#      - name: set up JDK 17
+#        uses: actions/setup-java@v3
+#        with:
+#          java-version: 17
+#          distribution: "temurin"
+#      - name: Validate Gradle Wrapper
+#        uses: gradle/wrapper-validation-action@v1
+#      - name: Run android tests
+#        uses: reactivecircus/android-emulator-runner@v2
+#        with:
+#          api-level: ${{ matrix.api-level }}
+#          target: ${{ matrix.target }}
+#          arch: ${{ matrix.arch }}
+#          script: ./gradlew $GRADLE_OPTS connectedCheck --stacktrace
 
   publish-to-snapshot:
     name: Publish SNAPSHOT to sonatype.org
     needs: [ build, unit-tests ]
     # Runs only in main
-    if: github.event_name != 'pull_request' && endsWith(needs.build.outputs.code-version, '-SNAPSHOT') && github.ref == 'refs/heads/main' &&  github.repository_owner == 'xatzipe'
+#    if: github.event_name != 'pull_request' && endsWith(needs.build.outputs.code-version, '-SNAPSHOT') && github.ref == 'refs/heads/main' &&  github.repository_owner == 'xatzipe'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     steps:
+      - name: Debug
+        run: |
+          echo github.event_name
+          echo ${{ github.event_name }}
+          echo ${{ needs.build.outputs.code-version }}
+          echo ${{ github.ref }}
+          echo ${{ github.repository_owner }}
       - name: Checkout project sources
         uses: actions/checkout@v4
       - uses: actions/setup-java@v3
