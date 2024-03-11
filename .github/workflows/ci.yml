@@ -85,7 +85,7 @@ jobs:
 
   publish-to-snapshot:
     name: Publish SNAPSHOT to sonatype.org
-    needs: [ unit-tests ]
+    needs: [ build, unit-tests ]
     # Runs only in main
     if: github.event_name != 'pull_request' && endsWith(needs.build.outputs.code-version, '-SNAPSHOT') && github.ref == 'refs/heads/main' &&  github.repository_owner == 'xatzipe'
     runs-on: ubuntu-latest
