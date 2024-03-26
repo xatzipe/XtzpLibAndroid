@@ -15,18 +15,6 @@ plugins {
     alias libs.plugins.maven.publish
 }
 
-dependencyCheck {
-
-   def nvdApiKey = System.getenv("NVD_API_KEY")
-   formats = ['XML', 'HTML']
-
-   if (nvdApiKey != null) {
-       nvd {
-           apiKey = "${nvdApiKey}"
-       }
-   }
-}
-
 apply from: 'jacoco.gradle'
 
 android {
@@ -83,6 +71,21 @@ tasks.register("clearDocsDir", Delete.class) {
 dokkaGfm.dependsOn("clearDocsDir")
 dokkaGfm {
     outputDirectory.set(file("$rootDir/docs"))
+}
+
+dependencyCheck {
+
+   def nvdApiKey = System.getenv("NVD_API_KEY")
+   formats = ['XML', 'HTML']
+
+   if (nvdApiKey != null) {
+    println("NVD Api key found.")
+       nvd {
+           apiKey = "${nvdApiKey}"
+       }
+   } else {
+    println("NVD Api key not found.")
+   }
 }
 
 licenseReport {
