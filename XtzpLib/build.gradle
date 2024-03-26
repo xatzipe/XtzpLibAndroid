@@ -15,6 +15,18 @@ plugins {
     alias libs.plugins.maven.publish
 }
 
+dependencyCheck {
+
+   def nvdApiKey = System.getenv("NVD_API_KEY")
+   formats = ['XML', 'HTML']
+
+   if (nvdApiKey != null) {
+       nvd {
+           apiKey = "${nvdApiKey}"
+       }
+   }
+}
+
 apply from: 'jacoco.gradle'
 
 android {
