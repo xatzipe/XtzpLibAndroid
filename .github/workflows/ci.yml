@@ -56,15 +56,15 @@ jobs:
     # needs: [ unit-tests ]
     strategy:
       matrix:
-        api-level: [26]
-        target: [google_apis]
-        # include:
-        #   - api-level: 28
-        #     target: default
-        #     arch: x86_64
-        #   - api-level: 33
-        #     target: google_apis # emulator API 33 only exists with Google APIs
-        #     arch: x86_64
+        # api-level: [26, 33]
+        # target: [default, google_apis]
+        include:
+          - api-level: 26
+            target: default
+            arch: x86_64
+          - api-level: 33
+            target: google_apis # emulator API 33 only exists with Google APIs
+            arch: x86_64
     permissions:
       contents: read
     steps:
