@@ -62,23 +62,21 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4
-      # - name: set up JDK 17
-      #   uses: actions/setup-java@v4
-          # with:
-          #           java-version: 17
-          #           distribution: "temurin"
-
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
-      - name: Gradle cache
-        uses: gradle/gradle-build-action@v2
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Gradle Setup
+        uses: gradle/actions/setup-gradle@v3
         
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v3
+
       - name: AVD cache
         uses: actions/cache@v3
         id: avd-cache
@@ -100,9 +98,6 @@ jobs:
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v2
-
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -114,14 +109,6 @@ jobs:
           disable-animations: true
           script: ./gradlew connectedCheck --stacktrace
         
-      # - name: Run android tests
-      #   uses: reactivecircus/android-emulator-runner@v2
-      #   with:
-      #     api-level: ${{ matrix.api-level }}
-      #     target: ${{ matrix.target }}
-      #     arch: ${{ matrix.arch }}
-      #     script: ./gradlew $GRADLE_OPTS connectedCheck --stacktrace
-
 #   publish-to-snapshot:
 #     name: Publish SNAPSHOT to sonatype.org
 #     needs: [ build ]
