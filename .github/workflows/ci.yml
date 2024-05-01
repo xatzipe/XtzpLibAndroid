@@ -96,6 +96,9 @@ jobs:
           disable-animations: false
           script: echo "Generated AVD snapshot for caching."
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v2
+
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -107,8 +110,7 @@ jobs:
           disable-animations: true
           script: ./gradlew connectedCheck --stacktrace
         
-      # - name: Validate Gradle Wrapper
-      #   uses: gradle/wrapper-validation-action@v2
+
 
       # - name: Run android tests
       #   uses: reactivecircus/android-emulator-runner@v2
