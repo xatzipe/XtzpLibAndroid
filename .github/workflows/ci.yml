@@ -58,7 +58,7 @@ jobs:
       matrix:
         api-level: [26, 33]
         target: [google_apis]
-        arch: [x86]
+        arch: [x86_64, arm64-v8a]
         # include:
         #   - api-level: 26
         #     target: google_apis
