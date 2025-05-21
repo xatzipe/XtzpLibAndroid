@@ -79,7 +79,7 @@ jobs:
       - run: mkdocs build
       # Create artifact for next job (optional, if we want to avoid cloning again)
       - name: Create site artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: site-content
           path: site/
