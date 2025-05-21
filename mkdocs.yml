@@ -1,0 +1,16 @@
+site_name: XtzpLibAndroid
+repo_url: https://github.com/xatzipe/XtzpLibAndroid
+nav:
+  - Home: index.md
+  - Library: library.md
+  - API Reference: api.md
+  - License: license.md
+theme:
+  name: material
+  palette:
+    primary: indigo
+    accent: pink
+markdown_extensions:
+  - toc
+  - tables
+  - admonition

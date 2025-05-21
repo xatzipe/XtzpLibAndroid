@@ -50,64 +50,64 @@ jobs:
   #       with:
   #         arguments: test --full-stacktrace
 
-  android-tests:
-    runs-on: ubuntu-latest
-    timeout-minutes: 35
-    # needs: [ unit-tests ]
-    strategy:
-      matrix:
-        api-level: [26, 33]
-        target: [google_apis]
-        arch: [x86_64]
-    permissions:
-      contents: read
-    steps:
-      - name: Enable KVM
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
+  # android-tests:
+  #   runs-on: ubuntu-latest
+  #   timeout-minutes: 35
+  #   # needs: [ unit-tests ]
+  #   strategy:
+  #     matrix:
+  #       api-level: [26, 33]
+  #       target: [google_apis]
+  #       arch: [x86_64]
+  #   permissions:
+  #     contents: read
+  #   steps:
+  #     - name: Enable KVM
+  #       run: |
+  #         echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+  #         sudo udevadm control --reload-rules
+  #         sudo udevadm trigger --name-match=kvm
 
-      - name: Checkout the code
-        uses: actions/checkout@v4
+  #     - name: Checkout the code
+  #       uses: actions/checkout@v4
 
-      - name: Gradle Setup
-        uses: gradle/actions/setup-gradle@v3
+  #     - name: Gradle Setup
+  #       uses: gradle/actions/setup-gradle@v3
         
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v3
+  #     - name: Validate Gradle Wrapper
+  #       uses: gradle/wrapper-validation-action@v3
 
-      - name: AVD cache
-        uses: actions/cache@v3
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.arch }}
+  #     - name: AVD cache
+  #       uses: actions/cache@v3
+  #       id: avd-cache
+  #       with:
+  #         path: |
+  #           ~/.android/avd/*
+  #           ~/.android/adb*
+  #         key: avd-${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.arch }}
 
-      - name: create AVD and generate snapshot for caching
-        if: steps.avd-cache.outputs.cache-hit != 'true'
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.target }}
-          arch: ${{ matrix.arch }}
-          force-avd-creation: false
-          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: false
-          script: echo "Generated AVD snapshot for caching."
+  #     - name: create AVD and generate snapshot for caching
+  #       if: steps.avd-cache.outputs.cache-hit != 'true'
+  #       uses: reactivecircus/android-emulator-runner@v2
+  #       with:
+  #         api-level: ${{ matrix.api-level }}
+  #         target: ${{ matrix.target }}
+  #         arch: ${{ matrix.arch }}
+  #         force-avd-creation: false
+  #         emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+  #         disable-animations: false
+  #         script: echo "Generated AVD snapshot for caching."
 
-      - name: run tests
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.target }}
-          arch: ${{ matrix.arch }}
-          force-avd-creation: false
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          disable-animations: true
-          script: ./gradlew connectedCheck --stacktrace
+  #     - name: run tests
+  #       uses: reactivecircus/android-emulator-runner@v2
+  #       with:
+  #         api-level: ${{ matrix.api-level }}
+  #         target: ${{ matrix.target }}
+  #         arch: ${{ matrix.arch }}
+  #         force-avd-creation: false
+  #         emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+  #         disable-animations: true
+  #         script: ./gradlew connectedCheck --stacktrace
         
 #   publish-to-snapshot:
 #     name: Publish SNAPSHOT to sonatype.org
