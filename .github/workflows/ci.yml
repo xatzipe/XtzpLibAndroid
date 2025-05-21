@@ -92,12 +92,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy to Dev Environment
     steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v3
-        with:
-          ref: main
-          submodules: true
-          lfs: false
+      # - name: Checkout main branch
+      #   uses: actions/checkout@v3
+      #   with:
+      #     ref: main
+      #     submodules: true
+      #     lfs: false
       - name: Download site artifact
         uses: actions/download-artifact@v4
         with:
