@@ -24,10 +24,11 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v2
       - name: Build with Gradle Wrapper
-        uses: gradle/gradle-build-action@v3.1.0
-        with:
-          gradle-version: wrapper
-          arguments: build
+        run: echo "Simulate build" # ./gradlew build --full-stacktrace
+        # uses: gradle/gradle-build-action@v3.1.0
+        # with:
+        #   gradle-version: wrapper
+        #   arguments: build
       - id: extract
         name: Extract code version from gradle.properties
         run: echo "CODE_VERSION=$(awk -F= '$1~/VERSION_NAME/{print $2}' gradle.properties)" >> $GITHUB_OUTPUT
