@@ -54,7 +54,6 @@ jobs:
   #         arguments: test --full-stacktrace
 
   build_mkdocs:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     needs: [build]
     name: Build MkDocs and Deploy to gh-pages
