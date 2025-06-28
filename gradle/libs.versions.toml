@@ -7,7 +7,7 @@ kotlin = "1.8.10"
 gradle-plugin = "7.4.2"
 kotlinxSerialization = "1.6.2"
 mavenPublish = "0.27.0"
-sonarqube = "4.4.1.3373"
+sonarqube = "5.1.0.4882"
 dependencycheck = "9.0.10"
 kotlinx-knit = "0.5.0"
 
